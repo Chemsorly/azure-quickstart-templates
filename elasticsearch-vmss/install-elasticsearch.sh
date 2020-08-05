@@ -62,7 +62,7 @@ fi
 
 #Script Parameters
 CLUSTER_NAME="es-azure"
-ES_VERSION="5.1.2"
+ES_VERSION="7.8.1"
 IS_DATA_NODE=1
 
 #Loop through options passed
@@ -130,7 +130,7 @@ install_es()
 {
     wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
     apt-get install apt-transport-https
-    echo "deb https://artifacts.elastic.co/packages/5.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-5.x.list
+    echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-7.x.list
     apt-get update -y
     apt-get install -y elasticsearch
     pushd /usr/share/elasticsearch/
@@ -173,7 +173,7 @@ configure_system()
 	resolvconf -u
 	ES_HEAP=`free -m |grep Mem | awk '{if ($2/2 >31744)  print 31744;else printf "%.0f", $2/2;}'`
 	echo "ES_JAVA_OPTS=\"-Xms${ES_HEAP}m -Xmx${ES_HEAP}m\"" >> /etc/default/elasticsearch
-    echo "JAVA_HOME=$JAVA_HOME" >> /etc/default/elasticsearch
+    # echo "JAVA_HOME=$JAVA_HOME" >> /etc/default/elasticsearch
     echo 'MAX_OPEN_FILES=65536' >> /etc/default/elasticsearch
     echo 'MAX_LOCKED_MEMORY=unlimited' >> /etc/default/elasticsearch
 
@@ -247,7 +247,7 @@ start_service()
 
 log "starting elasticsearch setup"
 
-install_java
+# install_java
 install_es
 configure_es
 configure_system
