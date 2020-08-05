@@ -164,6 +164,8 @@ configure_es()
 	else
         echo "node.master: true" >> /etc/elasticsearch/elasticsearch.yml
         echo "node.data: false" >> /etc/elasticsearch/elasticsearch.yml
+        echo 'discovery.seed_hosts: ["10.0.0.10", "10.0.0.11", "10.0.0.12"]' >> /etc/elasticsearch/elasticsearch.yml
+        echo 'cluster.initial_master_nodes: ["10.0.0.10", "10.0.0.11", "10.0.0.12"]' >> /etc/elasticsearch/elasticsearch.yml
 	fi
 }
 
@@ -191,7 +193,7 @@ configure_system()
         # Kibana
         IP_ADDRESS=$(ip route get 8.8.8.8 | awk -F"src " 'NR==1{split($2,a," ");print a[1]}')
         echo "server.host: \"$IP_ADDRESS\"" >> /etc/kibana/kibana.yml
-        echo "elasticsearch.hosts: [\"http://$IP_ADDRESS:9200\"]" >> /etc/kibana/kibana.yml
+        echo "elasticsearch.hosts: [ \"http://$IP_ADDRESS:9200\" ]" >> /etc/kibana/kibana.yml
         echo "xpack.security.enabled: false" >> /etc/kibana/kibana.yml
         chown -R kibana:kibana /usr/share/kibana
     else
