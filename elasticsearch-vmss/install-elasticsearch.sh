@@ -156,8 +156,7 @@ configure_es()
 	echo 'discovery.seed_hosts: ["10.0.0.10", "10.0.0.11", "10.0.0.12"]' >> /etc/elasticsearch/elasticsearch.yml
     echo 'cluster.initial_master_nodes: ["10.0.0.10"]' >> /etc/elasticsearch/elasticsearch.yml
 	echo "network.host: _site_" >> /etc/elasticsearch/elasticsearch.yml
-	echo "bootstrap.memory_lock: true" >> /etc/elasticsearch/elasticsearch.yml
-    echo "xpack.security.enabled: true" >> /etc/elasticsearch/elasticsearch.yml
+	echo "bootstrap.memory_lock: true" >> /etc/elasticsearch/elasticsearch.yml    
 
 	if [ ${IS_DATA_NODE} -eq 1 ]; then
 	    echo "node.master: false" >> /etc/elasticsearch/elasticsearch.yml
@@ -193,6 +192,7 @@ configure_system()
         IP_ADDRESS=$(ip route get 8.8.8.8 | awk -F"src " 'NR==1{split($2,a," ");print a[1]}')
         echo "server.host: \"$IP_ADDRESS\"" >> /etc/kibana/kibana.yml
         echo "elasticsearch.hosts: [ \"http://$IP_ADDRESS:9200\" ]" >> /etc/kibana/kibana.yml
+        echo "xpack.security.enabled: true" >> /etc/kibana/kibana.yml
         chown -R kibana:kibana /usr/share/kibana
     else
         # data disk
