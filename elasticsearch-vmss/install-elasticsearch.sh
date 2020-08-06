@@ -232,11 +232,16 @@ start_service()
 
     if [ ${IS_DATA_NODE} -eq 0 ];
     then
+        if [ "$IP_ADDRESS" != "10.0.0.10" ];
+        then
+                # sleep if kibana is not first master node, so initial bootstrap can run without interruptions
+                sleep 300
+        fi
+
         log "Starting Kibana on ${HOSTNAME}"
         systemctl enable kibana.service
         systemctl start kibana.service
         sleep 10
-
         if [ `systemctl is-failed kibana.service` == 'failed' ];
         then
             log "Kibana unit failed to start"
